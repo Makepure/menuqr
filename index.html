@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Habesha RasTaurant | Golden Digital Menu</title>
+    <meta name="description" content="Digital menu for Habesha RasTaurant & Cafe - Ethiopian cuisine with Telebirr payment">
+    <meta name="author" content="Habesha RasTaurant">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs2-fix/dist/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0a0702, #020100);
+            font-family: 'Inter', sans-serif;
+            color: #f5e7c8;
+            scroll-behavior: smooth;
+        }
+
+        .gold-glow {
+            text-shadow: 0 0 5px #ffd966, 0 0 12px #ffb347, 0 0 20px #d4af37;
+        }
+
+        .neon-border {
+            box-shadow: 0 0 5px #ffd966, 0 0 12px rgba(212, 175, 55, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.7);
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.4);
+            padding-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.4rem;
+            font-weight: 700;
+            padding: 0.6rem 1.8rem;
+            cursor: pointer;
+            color: #f0d99d;
+            transition: 0.3s;
+            border-radius: 40px;
+            letter-spacing: 1px;
+            backdrop-filter: blur(2px);
+            font-family: inherit;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #d4af37, #f5b042);
+            color: #0a0600;
+            box-shadow: 0 0 15px #ffcc44, 0 0 5px #ffb347;
+            text-shadow: none;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeSlideUp 0.4s ease-out;
+        }
+
+        .tab-content.active-content {
+            display: block;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .menu-card {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+            border-radius: 32px;
+            padding: 1.5rem;
+            transition: 0.2s ease;
+            border-left: 4px solid #e6b422;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+        }
+
+        .menu-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 18px rgba(230, 180, 34, 0.4);
+        }
+
+        .item-name {
+            font-size: 1.7rem;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #e6b422;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-price {
+            color: #ffd966;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .item-desc {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            margin-top: 8px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin: 2rem 0 1rem 0;
+            background: linear-gradient(135deg, #ffdd88, #e6b422);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            border-left: 5px solid #f5b042;
+            padding-left: 1rem;
+        }
+
+        .payment-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .payment-card {
+            background: rgba(10, 8, 3, 0.85);
+            backdrop-filter: blur(8px);
+            border-radius: 36px;
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 260px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            transition: all 0.2s;
+        }
+
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        #telebirr-qr {
+            background: white;
+            padding: 12px;
+            border-radius: 28px;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .neon-text {
+            color: #ffde9c;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .copy-btn {
+            background: #d4af37;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #1e1a0c;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #ffcd70;
+            box-shadow: 0 0 8px gold;
+        }
+
+        .quiz-area {
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 2rem;
+            margin-top: 1rem;
+            border: 1px solid #f3b33d;
+        }
+
+        .quiz-question {
+            font-size: 1.7rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-opt {
+            background: #2a2416;
+            padding: 0.8rem 1.6rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e6b422;
+        }
+
+        .quiz-opt:hover {
+            background: #e6b422;
+            color: #0f0b02;
+            transform: scale(1.02);
+            box-shadow: 0 0 12px gold;
+        }
+
+        .quiz-feedback {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 1rem;
+            color: #ffdf9c;
+        }
+
+        .next-quiz {
+            display: block;
+            margin: 20px auto 0;
+            background: linear-gradient(95deg, #b8860b, #e6b422);
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 720px) {
+            .container {
+                padding: 1rem;
+            }
+            .tab-btn {
+                font-size: 1.1rem;
+                padding: 0.4rem 1rem;
+            }
+            .quiz-question {
+                font-size: 1.2rem;
+            }
+        }
+
+        .vector-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #d4af37;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="vector-bg">
+    <svg width="100%" height="100%" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffdd99" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#b8860b" stop-opacity="0.3"/>
+            </linearGradient>
+        </defs>
+        <path d="M0 400 L200 200 L400 300 L600 150 L800 250 L1000 100 L1200 250 L1100 400 L900 500 L700 450 L500 550 L300 500 L100 600 Z" fill="url(#goldGrad)" stroke="#ffcc66" stroke-width="2" fill-opacity="0.2" stroke-opacity="0.5"/>
+        <circle cx="200" cy="500" r="40" stroke="#f5b042" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
+        <circle cx="950" cy="200" r="70" stroke="#ffcc66" stroke-width="1" fill="none"/>
+        <path d="M850 650 L900 600 L950 630 L920 680 Z" fill="#d4af37" fill-opacity="0.2" stroke="gold" stroke-width="1.2"/>
+    </svg>
+</div>
+
+<div class="container">
+    <h1 style="text-align: center; font-size: 2.8rem; margin-bottom: 0.5rem;" class="gold-glow">☥ HABESHA RASTURANT & CAFE ☥</h1>
+    <p style="text-align: center; margin-bottom: 1.8rem; letter-spacing: 1px;">✨ Golden Taste • Ethiopian Vibe • Modern Neon ✨</p>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="menu">🍛 MENU</button>
+        <button class="tab-btn" data-tab="payment">💳 PAYMENT & QR</button>
+        <button class="tab-btn" data-tab="quiz">🎉 FUN QUIZ</button>
+    </div>
+
+    <!-- MENU PAGE -->
+    <div id="menu" class="tab-content active-content">
+        <div class="menu-section">
+            <h2 class="section-title">🔥 Habesha Specials</h2>
+            <div class="menu-grid">
+                <div class="menu-card"><div class="item-name">Doro Wat <span class="item-price">350 ETB</span></div><div class="item-desc">Spicy chicken stew with boiled egg, served with injera. Traditional masterpiece!</div></div>
+                <div class="menu-card"><div class="item-name">Kitfo <span class="item-price">420 ETB</span></div><div class="item-desc">Minced raw beef with mitmita & kibe, classic delight. Served with cottage cheese.</div></div>
+                <div class="menu-card"><div class="item-name">Tibs Sega <span class="item-price">390 ETB</span></div><div class="item-desc">Sautéed beef cubes with rosemary, onions & peppers. Sizzling hot!</div></div>
+                <div class="menu-card"><div class="item-name">Shiro Wet <span class="item-price">180 ETB</span></div><div class="item-desc">Chickpea flour puree with berbere, vegan favorite. Creamy and aromatic.</div></div>
+            </div>
+            <h2 class="section-title">🌿 Vegan & Fresh</h2>
+            <div class="menu-grid">
+                <div class="menu-card"><div class="item-name">Misir Wat <span class="item-price">160 ETB</span></div><div class="item-desc">Red lentil stew, spiced to perfection with Ethiopian spices.</div></div>
+                <div class="menu-card"><div class="item-name">Gomen <span class="item-price">140 ETB</span></div><div class="item-desc">Collard greens with garlic & ginger. Healthy and delicious.</div></div>
+                <div class="menu-card"><div class="item-name">Firfir <span class="item-price">200 ETB</span></div><div class="item-desc">Torn injera with spicy sauce, optional meat. Breakfast favorite!</div></div>
+                <div class="menu-card"><div class="item-name">Atkilt Wat <span class="item-price">150 ETB</span></div><div class="item-desc">Cabbage, carrots, potatoes simmered in turmeric and garlic.</div></div>
+            </div>
+            <h2 class="section-title">☕ Drinks & Coffee Ceremony</h2>
+            <div class="menu-grid">
+                <div class="menu-card"><div class="item-name">Ethiopian Coffee <span class="item-price">90 ETB</span></div><div class="item-desc">Fresh roasted, traditional jebena buna with popcorn.</div></div>
+                <div class="menu-card"><div class="item-name">Tej (Honey Wine) <span class="item-price">210 ETB</span></div><div class="item-desc">Sweet golden honey wine, house special. Served in traditional flask.</div></div>
+                <div class="menu-card"><div class="item-name">Spiced Tea <span class="item-price">70 ETB</span></div><div class="item-desc">Korarima & cinnamon infused. Perfect for chilly evenings.</div></div>
+                <div class="menu-card"><div class="item-name">Fresh Juice <span class="item-price">80 ETB</span></div><div class="item-desc">Mango, avocado, or papaya. Made fresh daily.</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT PAGE -->
+    <div id="payment" class="tab-content">
+        <div class="payment-row">
+            <div class="payment-card neon-border">
+                <h2 style="color:#ffd966;">📱 Telebirr Merchant</h2>
+                <p style="font-size: 1.8rem; font-weight: bold; margin: 10px 0;" id="telebirrNumber">09XX-XXX-XXX</p>
+                <p style="font-size: 1.1rem;">Merchant Name: <strong>Habesha RasTaurant</strong></p>
+                <div class="qr-container" id="telebirr-qr"></div>
+                <button class="copy-btn" data-copy="0912345678">📋 Copy Telebirr Number</button>
+                <p style="margin-top: 12px; font-size: 0.8rem;">Scan QR or use number above to pay via Telebirr</p>
+            </div>
+
+            <div class="payment-card neon-border">
+                <h2 style="color:#ffd966;">🏦 Bank Account</h2>
+                <p><strong>Commercial Bank of Ethiopia (CBE)</strong></p>
+                <p style="font-size: 1.4rem; font-weight: bold;" id="accountNumber">1000 123 456 789</p>
+                <p>Account Holder: HABESHA RASTURANT PLC</p>
+                <button class="copy-btn" data-copy="1000123456789">📋 Copy Account Number</button>
+                <p style="margin-top: 12px;">Bank transfer / deposit accepted</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 1rem; background: rgba(0,0,0,0.4); border-radius: 60px; padding: 1rem;">
+            <p>⚡ After payment, please show confirmation to our staff. Thank you! ⚡</p>
+            <p style="font-size: 0.8rem; margin-top: 8px;">📍 Location: Bole Road, Addis Ababa | 📞 +251-XXX-XXXXXX</p>
+        </div>
+    </div>
+
+    <!-- QUIZ PAGE -->
+    <div id="quiz" class="tab-content">
+        <div class="quiz-area">
+            <div style="text-align:center; margin-bottom: 8px;">🧠✨ <span class="gold-glow">Habesha Brain Challenge</span> ✨🧠</div>
+            <div id="quiz-container">
+                <div class="quiz-question" id="quizQuestion">Loading fun...</div>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-feedback" id="quizFeedback"></div>
+                <button id="nextQuizBtn" class="next-quiz">⟳ Next Question</button>
+            </div>
+            <p style="text-align:center; margin-top: 25px; font-size:0.8rem;">⭐ Answer correctly and get a virtual high-five! ⭐</p>
+        </div>
+    </div>
+    <footer>
+        Habesha RasTaurant & Cafe — Golden Spices & Vibes | ሰላም | Open daily 9am - 11pm
+    </footer>
+</div>
+
+<script>
+    // Configuration - UPDATE THESE WITH YOUR ACTUAL DETAILS
+    const TELEBIRR_NUMBER = "0912345678";
+    const BANK_ACCOUNT = "1000123456789";
+    
+    // Update display
+    document.getElementById('telebirrNumber').innerText = TELEBIRR_NUMBER;
+    document.getElementById('accountNumber').innerText = BANK_ACCOUNT.replace(/(\d{4})(?=\d)/g, '$1 ');
+    
+    // QR Code Generation
+    function generateQR() {
+        const qrDiv = document.getElementById("telebirr-qr");
+        if (qrDiv) {
+            qrDiv.innerHTML = "";
+            new QRCode(qrDiv, {
+                text: `Telebirr Pay to: ${TELEBIRR_NUMBER} (Habesha Restaurant)`,
+                width: 150,
+                height: 150,
+                colorDark: "#d4af37",
+                colorLight: "#000000",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        }
+    }
+    generateQR();
+
+    // Copy functionality with toast
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    const copyButtons = document.querySelectorAll(".copy-btn");
+    copyButtons.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const copyText = btn.getAttribute("data-copy");
+            if(copyText) {
+                navigator.clipboard.writeText(copyText).then(() => {
+                    const originalText = btn.innerText;
+                    btn.innerText = "✓ Copied!";
+                    showToast("✓ Copied to clipboard!");
+                    setTimeout(() => { btn.innerText = originalText; }, 1500);
+                }).catch(() => alert("Press manually copy"));
+            }
+        });
+    });
+
+    // TABS logic
+    const tabsBtns = document.querySelectorAll(".tab-btn");
+    const contents = document.querySelectorAll(".tab-content");
+
+    function switchTab(tabId) {
+        contents.forEach(content => {
+            content.classList.remove("active-content");
+            if(content.id === tabId) {
+                content.classList.add("active-content");
+            }
+        });
+        tabsBtns.forEach(btn => {
+            btn.classList.remove("active");
+            if(btn.getAttribute("data-tab") === tabId) {
+                btn.classList.add("active");
+            }
+        });
+    }
+
+    tabsBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const tabName = btn.getAttribute("data-tab");
+            if(tabName) switchTab(tabName);
+        });
+    });
+
+    // QUIZ DATA
+    const quizBank = [
+        {
+            question: "🇪🇹 Which spice blend is essential for Doro Wat?",
+            options: ["Berbere", "Turmeric only", "Curry powder", "Sumac"],
+            correct: 0,
+            explanation: "🔥 Berbere! The iconic Ethiopian red pepper spice mix gives Doro Wat its heat & color."
+        },
+        {
+            question: "🍯 What is 'Tej' in Habesha culture?",
+            options: ["A honey wine", "Spiced coffee", "Grilled meat", "Lentil stew"],
+            correct: 0,
+            explanation: "🍯 Tej is a delicious golden honey wine, often enjoyed during celebrations and special occasions."
+        },
+        {
+            question: "🤣 Why did the injera go to the party?",
+            options: ["Because it's spongy-fun!", "It wanted to get rolled", "To meet the wat", "All of the above"],
+            correct: 3,
+            explanation: "Haha! Injera is the life of the party – always rolling with wat & flavors! 🎉"
+        },
+        {
+            question: "☕ What is the traditional Ethiopian coffee ceremony called?",
+            options: ["Buna Qala", "Jebena Buna", "Coffee Ritual", "Shai"],
+            correct: 1,
+            explanation: "Jebena Buna! The beautiful coffee ceremony using a clay pot (jebena) with popcorn and incense."
+        },
+        {
+            question: "Which of these is a vegan dish in Habesha cuisine?",
+            options: ["Kitfo", "Doro Wat", "Shiro Wet", "Tibs"],
+            correct: 2,
+            explanation: "Shiro Wet (chickpea stew) is 100% vegan & absolutely comforting! Perfect for fasting seasons."
+        }
+    ];
+
+    let currentQuizIndex = 0;
+    let quizAnswered = false;
+    const quizQuestionEl = document.getElementById("quizQuestion");
+    const quizOptionsEl = document.getElementById("quizOptions");
+    const quizFeedbackEl = document.getElementById("quizFeedback");
+    const nextBtn = document.getElementById("nextQuizBtn");
+
+    function loadQuiz() {
+        quizAnswered = false;
+        quizFeedbackEl.innerHTML = "";
+        const qData = quizBank[currentQuizIndex];
+        quizQuestionEl.innerText = qData.question;
+        quizOptionsEl.innerHTML = "";
+        qData.options.forEach((opt, idx) => {
+            const optDiv = document.createElement("div");
+            optDiv.classList.add("quiz-opt");
+            optDiv.innerText = opt;
+            optDiv.setAttribute("data-opt-index", idx);
+            optDiv.addEventListener("click", () => handleAnswer(idx));
+            quizOptionsEl.appendChild(optDiv);
+        });
+        const allOpts = document.querySelectorAll(".quiz-opt");
+        allOpts.forEach(opt => {
+            opt.style.pointerEvents = "auto";
+            opt.style.opacity = "1";
+        });
+    }
+
+    function handleAnswer(selectedIdx) {
+        if (quizAnswered) {
+            quizFeedbackEl.innerHTML = "🤪 You already answered! Click 'Next' for another riddle.";
+            return;
+        }
+        const currentQ = quizBank[currentQuizIndex];
+        const isCorrect = (selectedIdx === currentQ.correct);
+        if (isCorrect) {
+            quizFeedbackEl.innerHTML = `✅ CORRECT! ${currentQ.explanation} 🎉 You are a Habesha food master! 🎉`;
+            quizFeedbackEl.style.color = "#d4ff9c";
+        } else {
+            const correctAnswerText = currentQ.options[currentQ.correct];
+            quizFeedbackEl.innerHTML = `❌ OOPS! The correct answer is "${correctAnswerText}". ${currentQ.explanation} 🌟 Keep trying, habesha spirit!`;
+            quizFeedbackEl.style.color = "#ffb347";
+        }
+        quizAnswered = true;
+        const allOpts = document.querySelectorAll(".quiz-opt");
+        allOpts.forEach(opt => {
+            opt.style.pointerEvents = "none";
+            opt.style.opacity = "0.7";
+        });
+    }
+
+    function nextQuiz() {
+        if (!quizAnswered) {
+            quizFeedbackEl.innerHTML = "👀 Please answer the current question first!";
+            return;
+        }
+        currentQuizIndex = (currentQuizIndex + 1) % quizBank.length;
+        loadQuiz();
+    }
+
+    nextBtn.addEventListener("click", nextQuiz);
+    loadQuiz();
+
+    // Interactive menu card effect
+    const menuCards = document.querySelectorAll(".menu-card");
+    menuCards.forEach(c => {
+        c.addEventListener("click", () => {
+            c.style.transform = "scale(0.98)";
+            setTimeout(() => { c.style.transform = ""; }, 120);
+        });
+    });
+</script>
+</body>
+</html>
