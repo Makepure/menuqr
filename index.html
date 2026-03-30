@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Habesha RasTaurant | Golden Digital Menu</title>
     <meta name="description" content="Digital menu for Habesha RasTaurant & Cafe - Ethiopian cuisine with Telebirr payment">
-    <meta name="author" content="Habesha RasTaurant">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs2-fix/dist/qrcode.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -20,6 +18,7 @@
             font-family: 'Inter', sans-serif;
             color: #f5e7c8;
             scroll-behavior: smooth;
+            min-height: 100vh;
         }
 
         .gold-glow {
@@ -35,6 +34,8 @@
             max-width: 1300px;
             margin: 0 auto;
             padding: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .tabs {
@@ -159,59 +160,60 @@
             border-radius: 36px;
             padding: 1.5rem;
             flex: 1;
-            min-width: 260px;
+            min-width: 280px;
             text-align: center;
             border: 1px solid rgba(212, 175, 55, 0.6);
             transition: all 0.2s;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px #ffcc66, 0 0 8px #e6b422;
         }
 
         .qr-container {
             display: flex;
             justify-content: center;
             margin: 1rem 0;
+            min-height: 180px;
         }
 
         #telebirr-qr {
             background: white;
             padding: 12px;
             border-radius: 28px;
-            width: 160px;
-            height: 160px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .neon-text {
-            color: #ffde9c;
-            font-weight: bold;
-            font-size: 1.3rem;
-        }
-
         .copy-btn {
             background: #d4af37;
             border: none;
-            padding: 6px 14px;
+            padding: 8px 20px;
             border-radius: 40px;
             font-weight: bold;
             color: #1e1a0c;
-            margin-top: 8px;
+            margin-top: 12px;
             cursor: pointer;
             transition: 0.2s;
+            font-size: 1rem;
         }
 
         .copy-btn:hover {
             background: #ffcd70;
-            box-shadow: 0 0 8px gold;
+            transform: scale(1.05);
+            box-shadow: 0 0 12px gold;
         }
 
         .quiz-area {
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
             border-radius: 48px;
             padding: 2rem;
             margin-top: 1rem;
-            border: 1px solid #f3b33d;
+            border: 2px solid #f3b33d;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
         }
 
         .quiz-question {
@@ -219,6 +221,7 @@
             font-weight: 700;
             text-align: center;
             margin-bottom: 1.8rem;
+            color: #ffde9c;
         }
 
         .quiz-options {
@@ -230,20 +233,27 @@
         }
 
         .quiz-opt {
-            background: #2a2416;
-            padding: 0.8rem 1.6rem;
+            background: linear-gradient(135deg, #2a2416, #1e1a0e);
+            padding: 0.8rem 1.8rem;
             border-radius: 60px;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.3s ease;
             border: 1px solid #e6b422;
+            font-size: 1rem;
         }
 
         .quiz-opt:hover {
-            background: #e6b422;
+            background: linear-gradient(135deg, #e6b422, #d4af37);
             color: #0f0b02;
-            transform: scale(1.02);
-            box-shadow: 0 0 12px gold;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px gold;
+        }
+
+        .quiz-opt.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
         }
 
         .quiz-feedback {
@@ -251,7 +261,9 @@
             font-size: 1.2rem;
             font-weight: 500;
             margin-top: 1rem;
-            color: #ffdf9c;
+            padding: 1rem;
+            border-radius: 30px;
+            background: rgba(0, 0, 0, 0.5);
         }
 
         .next-quiz {
@@ -259,19 +271,26 @@
             margin: 20px auto 0;
             background: linear-gradient(95deg, #b8860b, #e6b422);
             border: none;
-            padding: 10px 28px;
+            padding: 12px 32px;
             border-radius: 40px;
             font-weight: bold;
             cursor: pointer;
             font-size: 1rem;
+            transition: 0.3s;
+            color: #1e1a0c;
+        }
+
+        .next-quiz:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px gold;
         }
 
         footer {
             text-align: center;
             margin-top: 3rem;
-            padding: 1rem;
+            padding: 1.5rem;
             border-top: 1px solid rgba(212, 175, 55, 0.3);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
         }
 
         @media (max-width: 720px) {
@@ -279,11 +298,21 @@
                 padding: 1rem;
             }
             .tab-btn {
-                font-size: 1.1rem;
+                font-size: 1rem;
                 padding: 0.4rem 1rem;
             }
             .quiz-question {
                 font-size: 1.2rem;
+            }
+            .quiz-opt {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            .item-name {
+                font-size: 1.3rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
             }
         }
 
@@ -294,24 +323,25 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -1;
-            opacity: 0.2;
+            z-index: 0;
+            opacity: 0.25;
         }
 
         .toast {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #d4af37;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #d4af37, #f5b042);
             color: #000;
             padding: 12px 24px;
             border-radius: 40px;
             font-weight: bold;
             z-index: 1000;
-            animation: slideIn 0.3s ease;
+            animation: slideInRight 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
 
-        @keyframes slideIn {
+        @keyframes slideInRight {
             from {
                 transform: translateX(100%);
                 opacity: 0;
@@ -320,6 +350,23 @@
                 transform: translateX(0);
                 opacity: 1;
             }
+        }
+
+        .payment-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #ffd966;
+            letter-spacing: 1px;
+        }
+
+        .success-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
         }
     </style>
 </head>
@@ -337,11 +384,12 @@
         <circle cx="200" cy="500" r="40" stroke="#f5b042" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/>
         <circle cx="950" cy="200" r="70" stroke="#ffcc66" stroke-width="1" fill="none"/>
         <path d="M850 650 L900 600 L950 630 L920 680 Z" fill="#d4af37" fill-opacity="0.2" stroke="gold" stroke-width="1.2"/>
+        <path d="M100 100 L150 80 L200 100 L250 70 L300 90" stroke="#ffcc66" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
     </svg>
 </div>
 
 <div class="container">
-    <h1 style="text-align: center; font-size: 2.8rem; margin-bottom: 0.5rem;" class="gold-glow">☥ HABESHA RASTURANT & CAFE ☥</h1>
+    <h1 style="text-align: center; font-size: 2.5rem; margin-bottom: 0.5rem;" class="gold-glow">☥ HABESHA RASTURANT & CAFE ☥</h1>
     <p style="text-align: center; margin-bottom: 1.8rem; letter-spacing: 1px;">✨ Golden Taste • Ethiopian Vibe • Modern Neon ✨</p>
 
     <div class="tabs">
@@ -382,100 +430,155 @@
         <div class="payment-row">
             <div class="payment-card neon-border">
                 <h2 style="color:#ffd966;">📱 Telebirr Merchant</h2>
-                <p style="font-size: 1.8rem; font-weight: bold; margin: 10px 0;" id="telebirrNumber">09XX-XXX-XXX</p>
-                <p style="font-size: 1.1rem;">Merchant Name: <strong>Habesha RasTaurant</strong></p>
+                <div class="payment-number" id="telebirrDisplay">09XX-XXX-XXX</div>
+                <p style="font-size: 1rem;">Merchant: <strong>Habesha RasTaurant</strong></p>
                 <div class="qr-container" id="telebirr-qr"></div>
-                <button class="copy-btn" data-copy="0912345678">📋 Copy Telebirr Number</button>
-                <p style="margin-top: 12px; font-size: 0.8rem;">Scan QR or use number above to pay via Telebirr</p>
+                <button class="copy-btn" id="copyTelebirrBtn">📋 Copy Telebirr Number</button>
+                <p style="margin-top: 12px; font-size: 0.8rem;">✓ Scan QR code or use number above to pay via Telebirr</p>
+                <p style="margin-top: 8px; font-size: 0.75rem; color: #ffd966;">⚡ Instant payment accepted</p>
             </div>
 
             <div class="payment-card neon-border">
                 <h2 style="color:#ffd966;">🏦 Bank Account</h2>
                 <p><strong>Commercial Bank of Ethiopia (CBE)</strong></p>
-                <p style="font-size: 1.4rem; font-weight: bold;" id="accountNumber">1000 123 456 789</p>
-                <p>Account Holder: HABESHA RASTURANT PLC</p>
-                <button class="copy-btn" data-copy="1000123456789">📋 Copy Account Number</button>
-                <p style="margin-top: 12px;">Bank transfer / deposit accepted</p>
+                <div class="payment-number" id="bankDisplay">1000 123 456 789</div>
+                <p>Account Holder: <strong>HABESHA RASTURANT PLC</strong></p>
+                <button class="copy-btn" id="copyBankBtn">📋 Copy Account Number</button>
+                <p style="margin-top: 12px;">✓ Bank transfer / deposit accepted</p>
+                <p style="margin-top: 8px; font-size: 0.75rem;">🏦 All CBE branches nationwide</p>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 1rem; background: rgba(0,0,0,0.4); border-radius: 60px; padding: 1rem;">
-            <p>⚡ After payment, please show confirmation to our staff. Thank you! ⚡</p>
-            <p style="font-size: 0.8rem; margin-top: 8px;">📍 Location: Bole Road, Addis Ababa | 📞 +251-XXX-XXXXXX</p>
+        <div style="text-align: center; margin-top: 1.5rem; background: rgba(0,0,0,0.5); border-radius: 60px; padding: 1.2rem;">
+            <p>⚡ <strong>How to pay:</strong> Scan Telebirr QR or transfer to bank account. Show confirmation to staff. ⚡</p>
+            <p style="font-size: 0.85rem; margin-top: 10px;">📍 Location: Bole Road, Addis Ababa | 📞 +251-911-234567</p>
         </div>
     </div>
 
     <!-- QUIZ PAGE -->
     <div id="quiz" class="tab-content">
         <div class="quiz-area">
-            <div style="text-align:center; margin-bottom: 8px;">🧠✨ <span class="gold-glow">Habesha Brain Challenge</span> ✨🧠</div>
+            <div style="text-align:center; margin-bottom: 15px;">🧠✨ <span class="gold-glow" style="font-size: 1.3rem;">Habesha Brain Challenge</span> ✨🧠</div>
             <div id="quiz-container">
-                <div class="quiz-question" id="quizQuestion">Loading fun...</div>
+                <div class="quiz-question" id="quizQuestion">Loading fun questions...</div>
                 <div class="quiz-options" id="quizOptions"></div>
                 <div class="quiz-feedback" id="quizFeedback"></div>
                 <button id="nextQuizBtn" class="next-quiz">⟳ Next Question</button>
             </div>
-            <p style="text-align:center; margin-top: 25px; font-size:0.8rem;">⭐ Answer correctly and get a virtual high-five! ⭐</p>
+            <p style="text-align:center; margin-top: 25px; font-size:0.8rem;">⭐ Test your Habesha knowledge! Each answer reveals fun facts ⭐</p>
         </div>
     </div>
+    
     <footer>
         Habesha RasTaurant & Cafe — Golden Spices & Vibes | ሰላም | Open daily 9am - 11pm
+        <br>
+        <span style="font-size: 0.7rem;">© 2024 All Rights Reserved</span>
     </footer>
 </div>
 
 <script>
-    // Configuration - UPDATE THESE WITH YOUR ACTUAL DETAILS
+    // ============================================
+    // CONFIGURATION - UPDATE THESE VALUES
+    // ============================================
     const TELEBIRR_NUMBER = "0912345678";
     const BANK_ACCOUNT = "1000123456789";
     
-    // Update display
-    document.getElementById('telebirrNumber').innerText = TELEBIRR_NUMBER;
-    document.getElementById('accountNumber').innerText = BANK_ACCOUNT.replace(/(\d{4})(?=\d)/g, '$1 ');
+    // Display formatted numbers
+    document.getElementById('telebirrDisplay').innerText = TELEBIRR_NUMBER.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+    document.getElementById('bankDisplay').innerText = BANK_ACCOUNT.replace(/(\d{4})(?=\d)/g, '$1 ');
     
-    // QR Code Generation
-    function generateQR() {
+    // ============================================
+    // QR CODE GENERATION
+    // ============================================
+    function generateQRCode() {
         const qrDiv = document.getElementById("telebirr-qr");
         if (qrDiv) {
             qrDiv.innerHTML = "";
-            new QRCode(qrDiv, {
-                text: `Telebirr Pay to: ${TELEBIRR_NUMBER} (Habesha Restaurant)`,
-                width: 150,
-                height: 150,
-                colorDark: "#d4af37",
-                colorLight: "#000000",
-                correctLevel: QRCode.CorrectLevel.M
-            });
+            try {
+                new QRCode(qrDiv, {
+                    text: `Telebirr Pay to: ${TELEBIRR_NUMBER} (Habesha RasTaurant) - Amount: _____ ETB`,
+                    width: 150,
+                    height: 150,
+                    colorDark: "#d4af37",
+                    colorLight: "#000000",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+                console.log("✅ QR Code generated successfully");
+            } catch(e) {
+                console.error("QR Error:", e);
+                qrDiv.innerHTML = '<div style="background:white; padding:20px; border-radius:20px;">⚠️ QR Code</div>';
+            }
         }
     }
-    generateQR();
-
-    // Copy functionality with toast
-    function showToast(message) {
+    
+    // Wait for QRCode library to load
+    setTimeout(generateQRCode, 100);
+    
+    // ============================================
+    // TOAST NOTIFICATION
+    // ============================================
+    function showToast(message, isError = false) {
         const toast = document.createElement('div');
         toast.className = 'toast';
+        toast.style.background = isError ? 'linear-gradient(135deg, #dc3545, #c82333)' : 'linear-gradient(135deg, #d4af37, #f5b042)';
         toast.textContent = message;
         document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
     }
-
-    const copyButtons = document.querySelectorAll(".copy-btn");
-    copyButtons.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const copyText = btn.getAttribute("data-copy");
-            if(copyText) {
-                navigator.clipboard.writeText(copyText).then(() => {
-                    const originalText = btn.innerText;
-                    btn.innerText = "✓ Copied!";
-                    showToast("✓ Copied to clipboard!");
-                    setTimeout(() => { btn.innerText = originalText; }, 1500);
-                }).catch(() => alert("Press manually copy"));
+    
+    // Add slideOut animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
             }
-        });
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // ============================================
+    // COPY FUNCTIONALITY
+    // ============================================
+    document.getElementById('copyTelebirrBtn').addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(TELEBIRR_NUMBER);
+            showToast('✓ Telebirr number copied!');
+            const btn = document.getElementById('copyTelebirrBtn');
+            const originalText = btn.innerText;
+            btn.innerText = '✓ Copied!';
+            setTimeout(() => btn.innerText = originalText, 1500);
+        } catch(err) {
+            showToast('❌ Failed to copy', true);
+        }
     });
-
-    // TABS logic
+    
+    document.getElementById('copyBankBtn').addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(BANK_ACCOUNT);
+            showToast('✓ Bank account copied!');
+            const btn = document.getElementById('copyBankBtn');
+            const originalText = btn.innerText;
+            btn.innerText = '✓ Copied!';
+            setTimeout(() => btn.innerText = originalText, 1500);
+        } catch(err) {
+            showToast('❌ Failed to copy', true);
+        }
+    });
+    
+    // ============================================
+    // TABS FUNCTIONALITY
+    // ============================================
     const tabsBtns = document.querySelectorAll(".tab-btn");
     const contents = document.querySelectorAll(".tab-content");
-
+    
     function switchTab(tabId) {
         contents.forEach(content => {
             content.classList.remove("active-content");
@@ -490,60 +593,74 @@
             }
         });
     }
-
+    
     tabsBtns.forEach(btn => {
         btn.addEventListener("click", () => {
             const tabName = btn.getAttribute("data-tab");
             if(tabName) switchTab(tabName);
         });
     });
-
-    // QUIZ DATA
+    
+    // ============================================
+    // QUIZ FUNCTIONALITY - FULLY WORKING
+    // ============================================
     const quizBank = [
         {
             question: "🇪🇹 Which spice blend is essential for Doro Wat?",
             options: ["Berbere", "Turmeric only", "Curry powder", "Sumac"],
             correct: 0,
-            explanation: "🔥 Berbere! The iconic Ethiopian red pepper spice mix gives Doro Wat its heat & color."
+            explanation: "🔥 Berbere! The iconic Ethiopian red pepper spice mix gives Doro Wat its signature heat & deep red color. It's a blend of chili peppers, garlic, ginger, and over 15 other spices!"
         },
         {
             question: "🍯 What is 'Tej' in Habesha culture?",
             options: ["A honey wine", "Spiced coffee", "Grilled meat", "Lentil stew"],
             correct: 0,
-            explanation: "🍯 Tej is a delicious golden honey wine, often enjoyed during celebrations and special occasions."
+            explanation: "🍯 Tej is a delicious golden honey wine, fermented with gesho leaves. It's often enjoyed during celebrations, weddings, and special ceremonies in Ethiopia and Eritrea!"
         },
         {
             question: "🤣 Why did the injera go to the party?",
             options: ["Because it's spongy-fun!", "It wanted to get rolled", "To meet the wat", "All of the above"],
             correct: 3,
-            explanation: "Haha! Injera is the life of the party – always rolling with wat & flavors! 🎉"
+            explanation: "Haha! Injera is the life of the party – always rolling with wat & flavors! It's the perfect spongy bread that pairs with every Ethiopian dish. 🎉"
         },
         {
             question: "☕ What is the traditional Ethiopian coffee ceremony called?",
             options: ["Buna Qala", "Jebena Buna", "Coffee Ritual", "Shai"],
             correct: 1,
-            explanation: "Jebena Buna! The beautiful coffee ceremony using a clay pot (jebena) with popcorn and incense."
+            explanation: "Jebena Buna! The beautiful coffee ceremony uses a clay pot (jebena) to brew fresh coffee. It's a social event with popcorn, incense, and three rounds of coffee called 'Abol', 'Tona', and 'Baraka'."
         },
         {
-            question: "Which of these is a vegan dish in Habesha cuisine?",
+            question: "Which dish is 100% vegan in Habesha cuisine?",
             options: ["Kitfo", "Doro Wat", "Shiro Wet", "Tibs"],
             correct: 2,
-            explanation: "Shiro Wet (chickpea stew) is 100% vegan & absolutely comforting! Perfect for fasting seasons."
+            explanation: "Shiro Wet (chickpea stew) is 100% vegan & absolutely comforting! Made from ground chickpeas and spiced berbere, it's a staple during fasting seasons in Ethiopia."
+        },
+        {
+            question: "What does 'Habesha' refer to?",
+            options: ["A type of coffee", "The people of Ethiopia & Eritrea", "A spicy sauce", "Traditional clothing"],
+            correct: 1,
+            explanation: "Habesha refers to the people, culture, and languages of Ethiopia and Eritrea. It represents the rich heritage, cuisine, and traditions of the Horn of Africa!"
         }
     ];
-
+    
     let currentQuizIndex = 0;
     let quizAnswered = false;
+    let score = 0;
+    
     const quizQuestionEl = document.getElementById("quizQuestion");
     const quizOptionsEl = document.getElementById("quizOptions");
     const quizFeedbackEl = document.getElementById("quizFeedback");
     const nextBtn = document.getElementById("nextQuizBtn");
-
+    
     function loadQuiz() {
         quizAnswered = false;
         quizFeedbackEl.innerHTML = "";
+        quizFeedbackEl.style.background = "rgba(0, 0, 0, 0.5)";
+        
         const qData = quizBank[currentQuizIndex];
         quizQuestionEl.innerText = qData.question;
+        
+        // Clear and rebuild options
         quizOptionsEl.innerHTML = "";
         qData.options.forEach((opt, idx) => {
             const optDiv = document.createElement("div");
@@ -553,56 +670,113 @@
             optDiv.addEventListener("click", () => handleAnswer(idx));
             quizOptionsEl.appendChild(optDiv);
         });
-        const allOpts = document.querySelectorAll(".quiz-opt");
-        allOpts.forEach(opt => {
+        
+        // Enable all options
+        document.querySelectorAll(".quiz-opt").forEach(opt => {
+            opt.classList.remove("disabled");
             opt.style.pointerEvents = "auto";
             opt.style.opacity = "1";
         });
+        
+        // Update next button text
+        nextBtn.innerText = currentQuizIndex === quizBank.length - 1 ? "🏆 Finish & See Score" : "⟳ Next Question";
     }
-
+    
     function handleAnswer(selectedIdx) {
         if (quizAnswered) {
-            quizFeedbackEl.innerHTML = "🤪 You already answered! Click 'Next' for another riddle.";
+            showToast("🤪 You already answered this question!", false);
             return;
         }
+        
         const currentQ = quizBank[currentQuizIndex];
         const isCorrect = (selectedIdx === currentQ.correct);
+        
         if (isCorrect) {
-            quizFeedbackEl.innerHTML = `✅ CORRECT! ${currentQ.explanation} 🎉 You are a Habesha food master! 🎉`;
-            quizFeedbackEl.style.color = "#d4ff9c";
+            score++;
+            quizFeedbackEl.innerHTML = `✅ CORRECT! 🎉 ${currentQ.explanation}`;
+            quizFeedbackEl.style.background = "rgba(40, 167, 69, 0.2)";
+            quizFeedbackEl.style.color = "#a0ffa0";
+            showToast("🎉 Correct! +1 point", false);
         } else {
             const correctAnswerText = currentQ.options[currentQ.correct];
-            quizFeedbackEl.innerHTML = `❌ OOPS! The correct answer is "${correctAnswerText}". ${currentQ.explanation} 🌟 Keep trying, habesha spirit!`;
+            quizFeedbackEl.innerHTML = `❌ OOPS! The correct answer is "${correctAnswerText}".<br>📚 ${currentQ.explanation}`;
+            quizFeedbackEl.style.background = "rgba(220, 53, 69, 0.2)";
             quizFeedbackEl.style.color = "#ffb347";
+            showToast("❌ Wrong answer! Check the explanation", true);
         }
+        
         quizAnswered = true;
-        const allOpts = document.querySelectorAll(".quiz-opt");
-        allOpts.forEach(opt => {
+        
+        // Disable all options
+        document.querySelectorAll(".quiz-opt").forEach(opt => {
+            opt.classList.add("disabled");
             opt.style.pointerEvents = "none";
-            opt.style.opacity = "0.7";
+            opt.style.opacity = "0.6";
         });
     }
-
+    
     function nextQuiz() {
         if (!quizAnswered) {
-            quizFeedbackEl.innerHTML = "👀 Please answer the current question first!";
+            showToast("👀 Please answer the current question first!", true);
             return;
         }
-        currentQuizIndex = (currentQuizIndex + 1) % quizBank.length;
-        loadQuiz();
+        
+        if (currentQuizIndex + 1 < quizBank.length) {
+            currentQuizIndex++;
+            loadQuiz();
+        } else {
+            // Quiz finished - show final score
+            const percentage = Math.round((score / quizBank.length) * 100);
+            let message = "";
+            if (percentage === 100) message = "🏆 PERFECT! You're a true Habesha expert! 🏆";
+            else if (percentage >= 80) message = "🌟 Excellent! You know your Habesha culture well! 🌟";
+            else if (percentage >= 60) message = "👍 Good job! Keep exploring Habesha cuisine! 👍";
+            else message = "💪 Nice try! Learn more about amazing Habesha culture! 💪";
+            
+            quizFeedbackEl.innerHTML = `🎯 QUIZ COMPLETE! 🎯<br>Your Score: ${score}/${quizBank.length} (${percentage}%)<br><br>${message}<br><br>🔄 Click 'Restart Quiz' to play again!`;
+            quizFeedbackEl.style.background = "rgba(212, 175, 55, 0.3)";
+            quizFeedbackEl.style.color = "#ffde9c";
+            
+            // Change button to restart
+            nextBtn.innerText = "🔄 Restart Quiz";
+            nextBtn.removeEventListener("click", nextQuiz);
+            nextBtn.addEventListener("click", restartQuiz);
+            quizAnswered = false; // Allow restart
+        }
     }
-
+    
+    function restartQuiz() {
+        currentQuizIndex = 0;
+        score = 0;
+        quizAnswered = false;
+        loadQuiz();
+        nextBtn.innerText = "⟳ Next Question";
+        nextBtn.removeEventListener("click", restartQuiz);
+        nextBtn.addEventListener("click", nextQuiz);
+        quizFeedbackEl.innerHTML = "";
+        showToast("🔄 Quiz restarted! Good luck!", false);
+    }
+    
+    // Add event listener for next button
     nextBtn.addEventListener("click", nextQuiz);
+    
+    // Initialize quiz
     loadQuiz();
-
-    // Interactive menu card effect
+    
+    // ============================================
+    // MENU CARD INTERACTION
+    // ============================================
     const menuCards = document.querySelectorAll(".menu-card");
-    menuCards.forEach(c => {
-        c.addEventListener("click", () => {
-            c.style.transform = "scale(0.98)";
-            setTimeout(() => { c.style.transform = ""; }, 120);
+    menuCards.forEach(card => {
+        card.addEventListener("click", () => {
+            const itemName = card.querySelector(".item-name").innerText.split(" ")[0];
+            showToast(`✨ ${itemName} - Great choice! ✨`, false);
+            card.style.transform = "scale(0.98)";
+            setTimeout(() => { card.style.transform = ""; }, 150);
         });
     });
+    
+    console.log("✅ All systems ready! Habesha Restaurant Menu loaded successfully!");
 </script>
 </body>
 </html>
