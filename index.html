@@ -288,9 +288,49 @@
         footer {
             text-align: center;
             margin-top: 3rem;
-            padding: 1.5rem;
+            padding: 2rem 1.5rem;
             border-top: 1px solid rgba(212, 175, 55, 0.3);
             font-size: 0.85rem;
+        }
+
+        .powered-by {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px dashed rgba(212, 175, 55, 0.4);
+        }
+
+        .powered-by a {
+            color: #ffd966;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .powered-by a:hover {
+            color: #ffcd70;
+            text-shadow: 0 0 5px gold;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.8rem;
+        }
+
+        .contact-links a {
+            color: #ffd966;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+
+        .contact-links a:hover {
+            color: #ffcd70;
+            transform: translateY(-2px);
         }
 
         @media (max-width: 720px) {
@@ -313,6 +353,9 @@
             }
             .section-title {
                 font-size: 1.5rem;
+            }
+            .contact-links {
+                gap: 1rem;
             }
         }
 
@@ -360,13 +403,14 @@
             letter-spacing: 1px;
         }
 
-        .success-badge {
-            background: #28a745;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: inline-block;
+        .telegram-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 12px;
+            border-radius: 30px;
+            margin: 0 5px;
         }
     </style>
 </head>
@@ -469,9 +513,30 @@
     </div>
     
     <footer>
-        Habesha RasTaurant & Cafe — Golden Spices & Vibes | ሰላም | Open daily 9am - 11pm
-        <br>
-        <span style="font-size: 0.7rem;">© 2024 All Rights Reserved</span>
+        <div>
+            Habesha RasTaurant & Cafe — Golden Spices & Vibes | ሰላም | Open daily 9am - 11pm
+        </div>
+        
+        <div class="powered-by">
+            <div style="font-size: 0.8rem; opacity: 0.8;">✨ For More Services & Digital Solutions ✨</div>
+            <div style="margin-top: 10px;">
+                <strong style="color: #ffd966;">Powered by ADDIS WEBTECHNO</strong>
+            </div>
+            <div class="contact-links">
+                <a href="https://t.me/addis_power" target="_blank" class="telegram-link">
+                    📱 Telegram: @addis_power
+                </a>
+                <a href="mailto:agoodperception@gmail.com">
+                    📧 agoodperception@gmail.com
+                </a>
+            </div>
+            <div style="margin-top: 12px; font-size: 0.75rem; opacity: 0.7;">
+                🚀 Web Development | Digital Menu | QR Payment Systems | Restaurant Solutions
+            </div>
+            <div style="margin-top: 8px; font-size: 0.7rem;">
+                © 2024 Addis Webtechno - All Rights Reserved
+            </div>
+        </div>
     </footer>
 </div>
 
@@ -777,6 +842,7 @@
     });
     
     console.log("✅ All systems ready! Habesha Restaurant Menu loaded successfully!");
+    console.log("🔧 Powered by ADDIS WEBTECHNO - Digital Solutions for Ethiopian Restaurants");
 </script>
 </body>
 </html>
